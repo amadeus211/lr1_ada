@@ -11,28 +11,27 @@ procedure Main is
 
    task body break_thread is
    begin
-      delay 1.0;
+      delay 3.0;
       can_stop := true;
    end break_thread;
 
    task body main_thread is
       sum : Long_Long_Integer := 0;
-      b1 : break_thread;
+      step: Long_Long_Integer := 2;
       count_of_operations: Long_Long_Integer := 0;
    begin
       loop
-         sum := sum + 1;
+         sum := sum + step;
          count_of_operations:=count_of_operations+1;
          exit when can_stop;
       end loop;
       Ada.Text_IO.Put_Line("Thread " & ID'Img & " - Sum: " & Sum'Img & " - Operations: " & count_of_operations'Img);
-   end main_thread;
-   t1 : main_thread(1);
-   t2 : main_thread(2);
-   t3 : main_thread(3);
-   t4 : main_thread(4);
-
-begin
-
-   null;
+    end main_thread;
+    B1 : break_thread;
+    count_of_threads: Integer := 10;
+    Threads : array(1..count_of_threads) of access main_thread; 
+    begin 
+      for I in 1..count_of_threads loop
+        Threads(I) := new main_thread(I);
+     end loop;
 end Main;
